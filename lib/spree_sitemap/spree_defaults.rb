@@ -22,7 +22,7 @@ module SpreeSitemap::SpreeDefaults
   end
 
   def add_suites(options={})
-    suites = Spree::Suite.indexable.joins(:tabs).includes(:tabs).uniq
+    suites = Spree::Suite.indexable.includes(:tabs)
     suites.each do |suite|
       suite.tabs.each do |tab|
         add(suite_path(id: suite.permalink, tab: tab.tab_type), options)
