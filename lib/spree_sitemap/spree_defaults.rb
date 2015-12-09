@@ -21,12 +21,11 @@ module SpreeSitemap::SpreeDefaults
     add(new_spree_user_password_path, options)
   end
 
-  def add_suites(options={})
-    suites = Spree::Suite.indexable.includes(:tabs)
-    suites.each do |suite|
-      suite.tabs.each do |tab|
-        #add(suite_path(id: suite.permalink, tab: tab.tab_type), options)
-        add(index_page_item_path(id: suite.permalink, tab: tab.tab_type), options)
+  def add_index_page_items(options={})
+    index_page_items = Spree::IndexPageItem.indexable.includes(:tabs)
+    index_page_items.each do |index_page_item|
+      index_page_item.tabs.each do |tab|
+        add(index_page_item_path(id: index_page_item.permalink, tab: tab.tab_type), options)
       end
     end
   end
@@ -72,7 +71,6 @@ module SpreeSitemap::SpreeDefaults
   end
 
   def add_taxon(taxon, options={})
-    #suite = taxon.suites.order(:updated_at).last
     item = taxon.index_page_items.order(:updated_at).last
     last_updated = item ? item.updated_at :  taxon.updated_at
     add(nested_taxons_path(taxon.permalink), options.merge(:lastmod => last_updated))
