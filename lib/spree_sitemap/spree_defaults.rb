@@ -22,9 +22,9 @@ module SpreeSitemap::SpreeDefaults
   end
 
   def add_index_page_items(options={})
-    index_page_items = Spree::IndexPageItem.indexable.includes(:tabs)
+    index_page_items = Spree::IndexPageItem.indexable.includes(page: :tabs)
     index_page_items.each do |index_page_item|
-      index_page_item.tabs.each do |tab|
+      index_page_item.page.tabs.each do |tab|
         add(index_page_item_path(id: index_page_item.permalink, tab: tab.tab_type), options)
       end
     end
