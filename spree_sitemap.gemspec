@@ -15,7 +15,7 @@ Gem::Specification.new do |s|
   s.require_path = 'lib'
   s.requirements << 'none'
 
-  s.add_runtime_dependency 'spree_core', '~> 2.2.0'
+  s.add_runtime_dependency 'spree_core', '~> 2.4'
   s.add_runtime_dependency 'sitemap_generator', '~> 4.3.1'
 
   s.add_development_dependency 'database_cleaner', '~> 1.2.0'
@@ -26,4 +26,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'simplecov', '~> 0.7.1'
   s.add_development_dependency 'guard-rspec'
   s.add_development_dependency 'pry-rails'
+  s.add_development_dependency 'fog'
 end

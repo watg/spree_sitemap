@@ -21,23 +21,32 @@ module SpreeSitemap::SpreeDefaults
     add(new_spree_user_password_path, options)
   end
 
-  def add_index_page_items(options={})
-    index_page_items = Spree::IndexPageItem.active.uniq
-    index_page_items.each do |index_page_item|
-      index_page_item.page.tabs.each do |tab|
-        add(index_page_item_path(id: index_page_item.permalink, tab: tab.tab_type), options)
+  def add_suites(options={})
+    index_page_items = active_index_pages.suites.includes(page: :tabs)
+    index_page_items.flat_map(&:page).each do |suite|
+      suite.tabs.each do |tab|
+        add(suite_path(id: suite.permalink, tab: tab.tab_type), options)
       end
     end
   end
 
-#  def add_products(options={})
-#    active_products = Spree::Product.active.uniq
-#
-#    add(products_path, options.merge(:lastmod => active_products.last_updated))
-#    active_products.each do |product|
-#      add_product(product, options)
-#    end
-#  end
+  def add_how_tos(options={})
+    index_page_items = active_index_pages.how_tos.includes(page: :category)
+    index_page_items.flat_map(&:page).each do |how_to|
+      add(how_to_path(how_to.category.slug, how_to.permalink), options)
+    end
+  end
+
+  def add_free_patterns(options={})
+    index_page_items = active_index_pages.free_patterns
+    index_page_items.flat_map(&:page).each do |free_pattern|
+      add(free_pattern_path(id: free_pattern.permalink), options)
+    end
+  end
+
+  def active_index_pages
+    @active_index_pages ||= Spree::IndexPageItem.indexable.includes(:page).group("spree_index_page_items.id")
+  end
 
   def add_product(product, options={})
     opts = options.merge(:lastmod => product.updated_at)
