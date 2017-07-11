@@ -45,7 +45,10 @@ module SpreeSitemap::SpreeDefaults
   end
 
   def active_index_pages
-    @active_index_pages ||= Spree::IndexPageItem.indexable.includes(:page).group("spree_index_page_items.id")
+    @active_index_pages ||= Spree::IndexPageItem
+      .indexable
+      .not_discontinued
+      .includes(:page).group("spree_index_page_items.id")
   end
 
   def add_product(product, options={})
